@@ -52,10 +52,35 @@ services:
     networks:
       - default
 
-  mysql:
+  mysql_master:
     image: mysql:${MYSQL_VERSION}
     ports:
       - "${MYSQL_HOST_PORT}:3306"
+    # volumes:
+    #   - ${MYSQL_CONF_FILE}:/etc/mysql/conf.d/mysql.cnf:ro
+    #   - ${MYSQL_DATA_DIR}:/var/lib/mysql/:rw
+    # restart: always
+    networks:
+      - default
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+
+  mysql_slave_bak:
+    image: mysql:${MYSQL_VERSION}
+    ports:
+      - "${MYSQL_HOST_PORT_SLAVE1}:3306"
+    # volumes:
+    #   - ${MYSQL_CONF_FILE}:/etc/mysql/conf.d/mysql.cnf:ro
+    #   - ${MYSQL_DATA_DIR}:/var/lib/mysql/:rw
+    # restart: always
+    networks:
+      - default
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+  mysql_slave_data:
+    image: mysql:${MYSQL_VERSION}
+    ports:
+      - "${MYSQL_HOST_PORT_SLAVE2}:3306"
     # volumes:
     #   - ${MYSQL_CONF_FILE}:/etc/mysql/conf.d/mysql.cnf:ro
     #   - ${MYSQL_DATA_DIR}:/var/lib/mysql/:rw
