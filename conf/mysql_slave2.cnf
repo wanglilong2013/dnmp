@@ -1,6 +1,0 @@
-[mysqld]
-server-id = 3
-# relay_log = relay_bin
-# relay-log-index = relay-bin.index
-# read-only=1 # 除非有SUPER权限，否则只读
-# super-read-only=1 # SUPER权限也是只读

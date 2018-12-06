@@ -1,6 +1,7 @@
 version: "2"
 services:
   nginx:
+    container_name: nginx
     image: nginx:${NGINX_VERSION}
     ports:
       - "${NGINX_HTTP_HOST_PORT}:80"
@@ -15,6 +16,7 @@ services:
       - default
 
   php72:
+    container_name: app72
     build:
       context: .
       args:
@@ -34,6 +36,7 @@ services:
       - default
 
   php56:
+    container_name: app56
     build:
       context: .
       args:
@@ -53,11 +56,12 @@ services:
       - default
 
   mysql_master:
+    container_name: mysql_master
     image: mysql:${MYSQL_VERSION}
     ports:
       - "${MYSQL_HOST_PORT}:3306"
-    # volumes:
-    #   - ${MYSQL_CONF_FILE}:/etc/mysql/conf.d/mysql.cnf:ro
+    volumes:
+      - ${MYSQL_MASTER_CONF_FILE1}:/etc/mysql/conf.d/master.cnf:ro
     #   - ${MYSQL_DATA_DIR}:/var/lib/mysql/:rw
     # restart: always
     networks:
@@ -66,11 +70,12 @@ services:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
 
   mysql_slave_bak:
+    container_name: mysql_salve_bak
     image: mysql:${MYSQL_VERSION}
     ports:
       - "${MYSQL_HOST_PORT_SLAVE1}:3306"
-    # volumes:
-    #   - ${MYSQL_CONF_FILE}:/etc/mysql/conf.d/mysql.cnf:ro
+    volumes:
+      - ${MYSQL_SLAVE_CONF_FILE1}:/etc/mysql/conf.d/slave.cnf:ro
     #   - ${MYSQL_DATA_DIR}:/var/lib/mysql/:rw
     # restart: always
     networks:
@@ -78,11 +83,12 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
   mysql_slave_data:
+    container_name: mysql_slave_data
     image: mysql:${MYSQL_VERSION}
     ports:
       - "${MYSQL_HOST_PORT_SLAVE2}:3306"
-    # volumes:
-    #   - ${MYSQL_CONF_FILE}:/etc/mysql/conf.d/mysql.cnf:ro
+    volumes:
+      - ${MYSQL_SLAVE_CONF_FILE2}:/etc/mysql/conf.d/slave.cnf:ro
     #   - ${MYSQL_DATA_DIR}:/var/lib/mysql/:rw
     # restart: always
     networks:
